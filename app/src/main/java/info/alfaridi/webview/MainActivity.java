@@ -1,16 +1,15 @@
 package info.alfaridi.webview;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
+import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import org.xwalk.core.XWalkResourceClient;
-import org.xwalk.core.XWalkView;
+import java.util.List;
 
 import id.co.veritrans.android.api.VTDirect;
 import id.co.veritrans.android.api.VTInterface.ITokenCallback;
@@ -32,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         context = getApplicationContext();
         setContentView(R.layout.activity_main);
 
+        final TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText("Generate token");
+
         VTDirect vtDirect = new VTDirect();
         VTConfig.CLIENT_KEY = "VT-client-SimkwEjR3_fKj73D";
         VTConfig.VT_IsProduction = false;
@@ -49,29 +51,11 @@ public class MainActivity extends AppCompatActivity {
         vtDirect.getToken(new ITokenCallback() {
             @Override
             public void onSuccess(VTToken vtToken) {
-                if(vtToken.getRedirect_url() != null) {
-                    XWalkView webview = (XWalkView) findViewById(R.id.vtwebview);
-                    webview.setResourceClient(new VtXWalkResource(webview));
-                    webview.setPadding(0, 0, 0, 0);
-                    webview.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent motionEvent) {
-                            switch (motionEvent.getAction()) {
-                                case MotionEvent.ACTION_DOWN:
-                                case MotionEvent.ACTION_UP:
-                                    if (!v.hasFocus()) {
-                                        v.requestFocus();
-                                    }
-                                    break;
-                            }
+                textView.setText("Token: " + vtToken.getToken_id());
 
-                            return false;
-                        }
-                    });
-
-                    webview.load(vtToken.getRedirect_url(), null);
-                }
-
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(vtToken.getRedirect_url()));
+                Log.i("VT", vtToken.getRedirect_url());
+                startActivity(browserIntent);
             }
 
             @Override
@@ -82,24 +66,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private class VtXWalkResource extends XWalkResourceClient {
-
-        public VtXWalkResource(XWalkView view) {
-            super(view);
-        }
-
-        @Override
-        public void onLoadStarted(XWalkView view, String url) {
-            super.onLoadStarted(view, url);
-        }
-
-        @Override
-        public void onLoadFinished(XWalkView view, String url) {
-            super.onLoadFinished(view, url);
-            if(url.startsWith("https://api.sandbox.veritrans.co.id/v2/token/callback")) {
-                Toast.makeText(MainActivity.getContext(), "Callback success, continue to charging.", Toast.LENGTH_LONG).show();
-            }
-        }
-
-    }
 }
