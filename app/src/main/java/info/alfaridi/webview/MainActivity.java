@@ -2,20 +2,15 @@ package info.alfaridi.webview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-
-import org.xwalk.core.XWalkResourceClient;
-import org.xwalk.core.XWalkView;
 
 import id.co.veritrans.android.api.VTDirect;
 import id.co.veritrans.android.api.VTInterface.ITokenCallback;
@@ -39,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         VTDirect vtDirect = new VTDirect();
         VTConfig.CLIENT_KEY = "d4b273bc-201c-42ae-8a35-c9bf48c1152b";
-        VTConfig.VT_IsProduction = false;
+        VTConfig.VT_IsProduction = true;
 
         VTCardDetails cardDetails = new VTCardDetails();
         cardDetails.setCard_number("");
