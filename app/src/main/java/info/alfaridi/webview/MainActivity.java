@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                     WebView webview = (WebView) findViewById(R.id.webView);
                     webview.setWebViewClient(new VtResourceClient());
                     webview.setPadding(0, 0, 0, 0);
+                    webview.getSettings().setJavaScriptEnabled(true);
+                    webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
                     webview.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent motionEvent) {
